@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales & Revenue Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    margin:20px;
+}
+h1{
+    text-align:center;
+}
+.container{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    margin-bottom:20px;
+}
+.card{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 0 8px rgba(0,0,0,.2);
+}
+.chart{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    margin-top:20px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+    background:white;
+}
+table,th,td{
+    border:1px solid #ccc;
+}
+th,td{
+    padding:10px;
+    text-align:center;
+}
+th{
+    background:#007bff;
+    color:white;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Sales & Revenue Analysis Dashboard</h1>
+
+<div class="container">
+
+<div class="card">
+<h2>Total Sales</h2>
+<h1 id="sales"></h1>
+</div>
+
+<div class="card">
+<h2>Total Revenue</h2>
+<h1 id="revenue"></h1>
+</div>
+
+<div class="card">
+<h2>Top Product</h2>
+<h1 id="topProduct"></h1>
+</div>
+
+</div>
+
+<div class="chart">
+<canvas id="barChart"></canvas>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Sales</th>
+<th>Revenue</th>
+</tr>
+</thead>
+
+<tbody id="tableBody">
+</tbody>
+
+</table>
+
+<script>
+
+const data=[
+{name:"Laptop",sales:120,revenue:600000},
+{name:"Mobile",sales:200,revenue:500000},
+{name:"Keyboard",sales:150,revenue:75000},
+{name:"Mouse",sales:180,revenue:54000},
+{name:"Monitor",sales:90,revenue:180000}
+];
+
+let totalSales=0;
+let totalRevenue=0;
+let top=data[0];
+
+const tbody=document.getElementById("tableBody");
+
+data.forEach(item=>{
+
+totalSales+=item.sales;
+totalRevenue+=item.revenue;
+
+if(item.revenue>top.revenue){
+top=item;
+}
+
+tbody.innerHTML+=`
+<tr>
+<td>${item.name}</td>
+<td>${item.sales}</td>
+<td>₹${item.revenue}</td>
+</tr>
+`;
+
+});
+
+document.getElementById("sales").innerHTML=totalSales;
+document.getElementById("revenue").innerHTML="₹"+totalRevenue;
+document.getElementById("topProduct").innerHTML=top.name;
+
+new Chart(document.getElementById("barChart"),{
+
+type:"bar",
+
+data:{
+
+labels:data.map(x=>x.name),
+
+datasets:[{
+
+label:"Revenue",
+
+data:data.map(x=>x.revenue)
+
+}]
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
